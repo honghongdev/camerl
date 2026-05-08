@@ -1,0 +1,275 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="CaMeRL: Collision-Aware and Memory-Enhanced Reinforcement Learning for UAV Navigation in Multi-Scale Obstacle Environments">
+  <meta name="keywords" content="CaMeRL, UAV Navigation, Reinforcement Learning, Collision Avoidance, Multi-scale Obstacles, Quadrotor">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CaMeRL: Collision-Aware and Memory-Enhanced Reinforcement Learning for UAV Navigation in Multi-Scale Obstacle Environments</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" type="image/png" href="./static/images/favicon.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+
+<!-- Hero: 标题 / 作者 / 链接 -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+
+          <h1 class="title is-1 publication-title">CaMeRL</h1>
+          <h2 class="title is-4 publication-title" style="font-weight: normal; margin-top: -0.75rem;">
+            Collision-Aware and Memory-Enhanced Reinforcement Learning<br>
+            for UAV Navigation in Multi-Scale Obstacle Environments
+          </h2>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Anonymous Authors</span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Anonymous Institution</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- TODO: 论文 PDF 上线后更新 -->
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!-- TODO: arXiv 上线后更新 -->
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="ai ai-arxiv"></i></span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- TODO: YouTube 上线后更新 -->
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-youtube"></i></span>
+                  <span>Video</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Abstract -->
+<section class="section gray-background">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            In obstacle avoidance navigation of unmanned aerial vehicles (UAVs),
+            variations in obstacle scale have received strangely less attention than obstacle number or density.
+            Existing methods typically extract purely geometric features from single-frame depth observations.
+            Such representations tend to neglect small obstacles and lose spatial context under occlusions caused by large obstacles,
+            leading to noticeable degradation in environments with multi-scale obstacles.
+          </p>
+          <p>
+            To address this issue, we propose CaMeRL,
+            a Collision-aware and Memory-enhanced Reinforcement Learning framework for UAV navigation.
+            The collision-aware latent representation encodes risk-sensitive depth cues to preserve fine-grained obstacle structures,
+            improving its sensitivity to small obstacles.
+            The temporal memory module integrates observations across frames, mitigating partial observability caused by large-obstacle occlusions.
+          </p>
+          <p>
+            We evaluate CaMeRL with multi-scale obstacles, including ultra-small and extra-large obstacle settings.
+            Results show that CaMeRL outperforms state-of-the-art baselines across all scales,
+            with success rate gains of 0.48 and 0.28 in the ultra-small and extra-large settings, respectively.
+            More importantly, CaMeRL shows its capability of reliable navigation in cluttered outdoor environments.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Method -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <h2 class="title is-3">Method</h2>
+        <div class="content has-text-justified">
+          <p>
+            CaMeRL combines two complementary representation modules.
+            A VAE is trained to reconstruct collision-aware depth images, where obstacle boundaries
+            are inflated by the UAV body size, embedding safety-relevant geometry into the latent
+            space without runtime preprocessing.
+            An LSTM then aggregates latent sequences and is supervised by jointly reconstructing
+            both the current and a temporally offset collision-aware observation,
+            encouraging the hidden state to maintain scene context under occlusion.
+            The navigation policy is subsequently trained via RL with the representation
+            modules frozen.
+          </p>
+        </div>
+        <img src="./static/images/fig2_architecture.png"
+             alt="CaMeRL architecture"
+             style="max-width: 100%; height: auto;">
+        <h2 class="subtitle has-text-centered figure-caption">
+          Overview of the CaMeRL architecture and training pipeline.
+        </h2>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Multi-scale obstacle avoidance in simulation (video demos) -->
+<section class="section gray-background">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <h2 class="title is-3">Multi-scale Obstacle Avoidance in Simulation</h2>
+        <div class="content has-text-justified">
+          <p>
+            The policy is trained in a nominal-scale environment and evaluated zero-shot
+            across six obstacle scales ranging from ultra-small (1–5 cm) to extra-large (400–500 cm).
+            CaMeRL achieves consistently high success rates across all configurations,
+            demonstrating robust generalization to obstacle scale variation without retraining.
+          </p>
+        </div>
+
+        <div class="video-container">
+          <div class="video-item">
+            <video autoplay muted loop playsinline>
+              <source src="./static/videos/sim_us.mp4" type="video/mp4">
+            </video>
+            <h2 class="subtitle has-text-centered figure-caption">Ultra-small (US)</h2>
+          </div>
+          <div class="video-item">
+            <video autoplay muted loop playsinline>
+              <source src="./static/videos/sim_s.mp4" type="video/mp4">
+            </video>
+            <h2 class="subtitle has-text-centered figure-caption">Small (S)</h2>
+          </div>
+          <div class="video-item">
+            <video autoplay muted loop playsinline>
+              <source src="./static/videos/sim_m.mp4" type="video/mp4">
+            </video>
+            <h2 class="subtitle has-text-centered figure-caption">Medium (M)</h2>
+          </div>
+        </div>
+        <div class="video-container">
+          <div class="video-item">
+            <video autoplay muted loop playsinline>
+              <source src="./static/videos/sim_l.mp4" type="video/mp4">
+            </video>
+            <h2 class="subtitle has-text-centered figure-caption">Large (L)</h2>
+          </div>
+          <div class="video-item">
+            <video autoplay muted loop playsinline>
+              <source src="./static/videos/sim_xl.mp4" type="video/mp4">
+            </video>
+            <h2 class="subtitle has-text-centered figure-caption">Extra-large (XL)</h2>
+          </div>
+          <div class="video-item">
+            <video autoplay muted loop playsinline>
+              <source src="./static/videos/sim_mix.mp4" type="video/mp4">
+            </video>
+            <h2 class="subtitle has-text-centered figure-caption">Mixed-scale (MIX)</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Real-world deployment -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <h2 class="title is-3">Real-world Deployment</h2>
+
+        <div class="content has-text-justified">
+          <p>
+            CaMeRL is deployed on a 250&nbsp;mm quadrotor with an Intel RealSense D435,
+            NVIDIA Jetson Orin NX, and Pixhawk 6C mini.
+            The representation modules are fine-tuned on real-world depth data,
+            while the policy transfers directly from simulation.
+            Outdoor flight experiments confirm the feasibility of fully onboard deployment.
+          </p>
+        </div>
+
+        <div id="realworld-videos" class="video-container">
+          <div class="video-item">
+            <video autoplay muted loop playsinline>
+              <source src="./static/videos/realworld_third.mp4" type="video/mp4">
+            </video>
+            <h2 class="subtitle has-text-centered figure-caption">
+              Third-person view
+            </h2>
+          </div>
+          <div class="video-item">
+            <video autoplay muted loop playsinline>
+              <source src="./static/videos/realworld_fpv.mp4" type="video/mp4">
+            </video>
+            <h2 class="subtitle has-text-centered figure-caption">
+              Onboard first-person view
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+<!--
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{hong2025camerl,
+  title   = {CaMeRL: Collision-Aware and Memory-Enhanced Reinforcement Learning for UAV Navigation in Multi-Scale Obstacle Environments},
+  author  = {Hong, Hong and Liao, Feiyu and Liang, Yongheng and Wang, Haitao and Wu, Hejun},
+  year    = {2025},
+}</code></pre>
+  </div>
+</section>
+-->
+</body>
+</html>
